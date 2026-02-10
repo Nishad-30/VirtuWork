@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initializing Simulation - VirtuWork</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; }
+
+        /* The Orbiting Ball Animation - Fixed Alignment */
+        .loader-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .orbit-track {
+            position: absolute;
+            inset: 0;
+            border: 4px solid rgba(99, 102, 241, 0.1);
+            border-radius: 50%;
+        }
+
+        /* .spinning-ring {
+            position: absolute;
+            inset: 0;
+            border: 4px solid transparent;
+            border-top-color: #6366f1;
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        } */
+
+        .orbit-wrapper {
+            position: absolute;
+            inset: 0;
+            animation: rotate-orbit 2s linear infinite;
+        }
+
+        .ai-node {
+            position: absolute;
+            top: -6px; 
+            left: calc(50% - 8px);
+            width: 16px;
+            height: 16px;
+            background: #a855f7;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #a855f7, 0 0 30px rgba(168, 85, 247, 0.4);
+        } 
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes rotate-orbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-[#0f172a] text-white min-h-screen flex items-center justify-center overflow-hidden">
+    <div class="text-center z-10 px-4">
+        <div class="flex justify-center mb-10">
+            <div class="loader-container">
+                <div class="orbit-track"></div>
+                <div class="spinning-ring"></div>
+                <div class="orbit-wrapper">
+                    <div class="ai-node"></div>
+                </div>
+            </div>
+        </div>
+
+        <h1 class="text-3xl md:text-4xl font-bold mb-4 gradient-text">Initializing Your Simulation</h1>
+        <p id="status-text" class="text-gray-400 text-lg animate-pulse font-medium">Consulting Thinker Agent...</p>
+        
+        <div class="mt-8 w-full max-w-xs bg-gray-800/50 rounded-full h-2 mx-auto overflow-hidden border border-gray-700/30">
+            <div id="progress-bar" class="bg-gradient-to-r from-indigo-600 to-purple-600 h-full w-0 transition-all duration-1000 ease-in-out"></div>
+        </div>
+    </div>
+
+<script>
+    const simId = "{{ simulation_id }}";
+    const progressBar = document.getElementById('progress-bar');
+    const statusText = document.getElementById('status-text');
+
+    let retryCount = 0;
+    const maxRetries = 3;
+
+    async function startOrchestration() {
+        try {
+            statusText.innerText = "Thinker Agent: Designing project scope...";
+            progressBar.style.width = "30%";
+
+            const response = await fetch(`/simulation/initiate-ai/${simId}/`);
+            const data = await response.json();
+
+            if (data.status === 'success') {
+                handleSuccess();
+            } else {
+                handleRetry(data.message);
+            }
+        } catch (error) {
+            handleRetry("Network connection unstable.");
+        }
+    }
+
+    function handleSuccess() {
+        statusText.innerText = "Simulation Ready! Entering workspace...";
+        progressBar.style.width = "100%";
+        setTimeout(() => {
+            window.location.href = `/simulation/chat/${simId}/`;
+        }, 1000);
+    }
+
+    function handleRetry(errorMessage) {
+        if (retryCount < maxRetries) {
+            retryCount++;
+            statusText.innerText = `Retrying (${retryCount}/${maxRetries}): Agents busy...`;
+            setTimeout(startOrchestration, 5000); 
+        } else {
+            statusText.innerText = "Over-capacity. Redirecting to Dashboard...";
+            setTimeout(() => { window.location.href = "/dashboard/"; }, 3000);
+        }
+    }
+
+    // CRITICAL: Call the function to start the process
+    window.onload = startOrchestration;
+</script>
+</body>
+</html>
