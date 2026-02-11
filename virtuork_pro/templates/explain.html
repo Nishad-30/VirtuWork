@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works - VirtuWork</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #020617; }
+        .step-number { background: linear-gradient(135deg, #2563eb 0%, #14b8a6 100%); }
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .feature-icon { background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(20, 184, 166, 0.1) 100%); }
+    </style>
+</head>
+<body class="text-gray-200">
+
+    <nav class="p-6 border-b border-white/10 bg-[#020617]/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-gradient-to-r from-blue-600 to-teal-500 rounded-lg flex items-center justify-center text-white font-bold">V</div>
+                <a href="/" class="text-2xl font-black text-white">VirtuWork</a>
+            </div>
+            <div class="space-x-6">
+                <a href="{% url 'login' %}" class="bg-blue-600 hover:bg-blue-700 px-6 py-2.5 rounded-xl font-bold transition shadow-lg shadow-blue-600/20">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="py-24 px-6 text-center bg-gradient-to-b from-blue-900/10 to-[#020617]">
+        <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight text-white leading-tight">
+            Bridging the Gap Between <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-400">Learning & Hiring</span>
+        </h1>
+        <p class="text-gray-400 max-w-3xl mx-auto text-xl leading-relaxed font-medium">
+            VirtuWork is a web-based simulation platform designed to help students and early-career professionals transition from theoretical learning to practical, real-world industry experience.
+        </p>
+    </header>
+
+    <section class="max-w-7xl mx-auto px-6 py-20">
+        <div class="grid md:grid-cols-2 gap-16 items-center mb-32">
+            <div>
+                <h2 class="text-3xl font-black text-white mb-6 uppercase tracking-tight">The Problem</h2>
+                <p class="text-gray-400 text-lg leading-relaxed mb-8">
+                    Traditional education systems often focus primarily on academic examinations, offering limited exposure to professional workflows or workplace communication.
+                </p>
+                <ul class="space-y-5">
+                    <li class="flex items-center gap-4 text-red-400 font-bold text-sm tracking-wide">
+                        <span class="w-6 h-6 rounded-full bg-red-400/10 flex items-center justify-center"><i class="fas fa-times text-xs"></i></span>
+                        Limited practical exposure
+                    </li>
+                    <li class="flex items-center gap-4 text-red-400 font-bold text-sm tracking-wide">
+                        <span class="w-6 h-6 rounded-full bg-red-400/10 flex items-center justify-center"><i class="fas fa-times text-xs"></i></span>
+                        Inconsistent evaluation criteria
+                    </li>
+                    <li class="flex items-center gap-4 text-red-400 font-bold text-sm tracking-wide">
+                        <span class="w-6 h-6 rounded-full bg-red-400/10 flex items-center justify-center"><i class="fas fa-times text-xs"></i></span>
+                        Difficulty adapting to job roles
+                    </li>
+                </ul>
+            </div>
+            <div class="glass-card p-10 rounded-3xl border-blue-500/20">
+                <h2 class="text-3xl font-black mb-6 text-white uppercase tracking-tight">The <span class="text-blue-500">VirtuWork</span> Solution</h2>
+                <p class="text-gray-400 text-lg leading-relaxed mb-8">
+                    Our platform provides a realistic and interactive digital setting where you perform role-based tasks and interact with AI-powered stakeholders.
+                </p>
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="p-6 rounded-2xl bg-blue-600/5 border border-blue-500/20 text-center group hover:bg-blue-600/10 transition">
+                        <i class="fas fa-robot text-2xl mb-3 text-blue-500 group-hover:scale-110 transition"></i>
+                        <p class="text-xs font-black text-white uppercase tracking-widest">AI Stakeholders</p>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-teal-600/5 border border-teal-500/20 text-center group hover:bg-teal-600/10 transition">
+                        <i class="fas fa-chart-line text-2xl mb-3 text-teal-400 group-hover:scale-110 transition"></i>
+                        <p class="text-xs font-black text-white uppercase tracking-widest">Real Workflows</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mb-24">
+            <h2 class="text-4xl md:text-5xl font-black text-white mb-4 uppercase tracking-tighter">Your Journey Unfolds</h2>
+            <div class="w-24 h-1.5 bg-gradient-to-r from-blue-600 to-teal-500 mx-auto rounded-full"></div>
+        </div>
+
+        <div class="space-y-32">
+            <div class="flex flex-col md:flex-row gap-16 items-center">
+                <div class="flex-1">
+                    <div class="step-number w-16 h-16 rounded-2xl flex items-center justify-center text-3xl font-black text-white mb-8 transform rotate-3 shadow-xl shadow-blue-500/20">1</div>
+                    <h2 class="text-3xl font-black text-white mb-4 uppercase tracking-tight">Choose Your Track</h2>
+                    <p class="text-gray-400 leading-relaxed text-lg">Select a specialized job role modeled after industry-standard projects. Initialize your simulation environment with one click.</p>
+                </div>
+                <div class="flex-1 glass-card p-10 rounded-3xl border-white/5 shadow-2xl group hover:border-blue-500/40 transition relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 blur-3xl"></div>
+                    <i class="fas fa-laptop-code text-6xl text-blue-600 mb-8 block group-hover:scale-110 transition-transform duration-500"></i>
+                    <h4 class="text-xl font-bold text-white mb-2">Simulation Engine</h4>
+                    <p class="text-xs font-bold text-blue-400 uppercase tracking-widest">Compiling Role Constraints...</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row-reverse gap-16 items-center">
+                <div class="flex-1">
+                    <div class="step-number w-16 h-16 rounded-2xl flex items-center justify-center text-3xl font-black text-white mb-8 transform -rotate-3 shadow-xl shadow-teal-500/20">2</div>
+                    <h2 class="text-3xl font-black text-white mb-4 uppercase tracking-tight">Engage with AI Agents</h2>
+                    <p class="text-gray-400 leading-relaxed text-lg">Interact with AI personas representing HR, Managers, and Clients. Simulate professional communication and navigate workplace expectations.</p>
+                </div>
+                <div class="flex-1 glass-card p-8 rounded-3xl border-white/5 bg-[#0f172a]/40">
+                     <div class="flex gap-4 mb-6">
+                         <div class="w-10 h-10 rounded-xl bg-teal-500/20 flex items-center justify-center shrink-0"><i class="fas fa-user-tie text-teal-400"></i></div>
+                         <div class="bg-white/5 p-5 rounded-2xl rounded-tl-none text-sm text-gray-300 border border-white/5 leading-relaxed">"We need the risk analysis report by end of day. Any blockers we should address?"</div>
+                     </div>
+                     <div class="flex gap-4 justify-end">
+                         <div class="bg-blue-600 p-5 rounded-2xl rounded-tr-none text-sm text-white font-medium shadow-xl">"Currently optimizing the data pipeline for accuracy. On track for EOD!"</div>
+                         <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center shrink-0 text-blue-400 font-bold">U</div>
+                     </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-16 items-center">
+                <div class="flex-1">
+                    <div class="step-number w-16 h-16 rounded-2xl flex items-center justify-center text-3xl font-black text-white mb-8 transform rotate-3 shadow-xl shadow-blue-500/20">3</div>
+                    <h2 class="text-3xl font-black text-white mb-4 uppercase tracking-tight">AI-Driven Evaluation</h2>
+                    <p class="text-gray-400 leading-relaxed text-lg">Upload your artifacts for objective assessment. Our AI layer analyzes technical accuracy, response time, and professional logic.</p>
+                </div>
+                <div class="flex-1 text-center border-2 border-dashed border-blue-500/20 rounded-3xl p-16 bg-blue-500/5 group hover:bg-blue-500/10 transition-colors">
+                    <i class="fas fa-microchip text-6xl text-blue-500 mb-6 animate-pulse"></i>
+                    <p class="font-mono text-sm text-blue-400 font-bold tracking-widest uppercase">Auditing technical logic...</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row-reverse gap-16 items-center pb-20">
+                <div class="flex-1">
+                    <div class="step-number w-16 h-16 rounded-2xl flex items-center justify-center text-3xl font-black text-white mb-8 transform -rotate-3 shadow-xl shadow-teal-500/20">4</div>
+                    <h2 class="text-3xl font-black text-white mb-4 uppercase tracking-tight">Readiness Reporting</h2>
+                    <p class="text-gray-400 leading-relaxed text-lg">Receive a granular dashboard showing strengths and skill gaps. Use verified objective reports to prove your readiness to recruiters.</p>
+                </div>
+                <div class="flex-1 bg-gradient-to-br from-blue-900/40 to-teal-900/20 p-12 rounded-3xl border border-blue-500/20 text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-blue-600/5 opacity-50 blur-2xl"></div>
+                    <i class="fas fa-award text-7xl text-teal-400 mb-6 drop-shadow-[0_0_20px_rgba(20,184,166,0.5)]"></i>
+                    <h4 class="text-2xl font-black text-white mb-2 uppercase tracking-tight">Verified Proficiency</h4>
+                    <p class="text-blue-300 font-bold text-sm tracking-widest uppercase">92nd Percentile • Industry Ready</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="border-t border-white/10 py-12 bg-[#020617]">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-gray-600 text-[10px] font-black uppercase tracking-[0.4em]">VirtuWork © 2026. Professional Simulation Platform.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

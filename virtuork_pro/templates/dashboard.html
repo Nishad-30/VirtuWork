@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - VirtuWork</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-4px);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb, #14b8a6);
+            border-radius: 999px;
+            transition: width 0.5s ease-out;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+
+<body class="bg-[#020617] text-gray-200 min-h-screen flex flex-col">
+
+    <header class="border-b border-white/10 bg-[#020617]/80 backdrop-blur sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 bg-gradient-to-r from-blue-600 to-teal-500 rounded-lg flex items-center justify-center text-white font-bold">
+                    V
+                </div>
+                <h1 class="text-2xl font-extrabold text-white">VirtuWork</h1>
+            </div>
+            <div class="flex items-center gap-6">
+                <nav class="hidden md:flex gap-6 text-sm font-semibold">
+                    <a href="{% url 'how_it_works' %}" class="text-gray-400 hover:text-white transition">How it Works</a>
+                    <form action="{% url 'logout' %}" method="post" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="text-gray-400 hover:text-red-400 transition font-semibold">Logout</button>
+                    </form>
+                </nav>
+                <a href="{% url 'profile' %}" class="flex items-center gap-2 group">
+                    <div class="w-9 h-9 rounded-full border-2 border-blue-500 flex items-center justify-center bg-[#0f172a] text-white font-bold transition group-hover:border-teal-400">
+                        {{ user.username|first|upper }}
+                    </div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-10 flex-grow">
+        <div class="mb-10 fade-in">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-3">Welcome Back, {{ user.username }}! 👋</h2>
+            <p class="text-gray-400 text-lg">Continue your journey to land your dream job.</p>
+        </div>
+
+        <div id="dashboardView" class="fade-in">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <div class="lg:col-span-1 space-y-6">
+                    <div class="glass-card rounded-2xl p-6">
+                        <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                            <span class="w-2 h-6 bg-blue-600 rounded-full"></span>
+                            Current Activities
+                        </h2>
+
+                        <div class="space-y-4">
+                            {% for sim in simulations %}
+                            <div class="bg-white/5 border border-white/5 p-5 rounded-xl card-hover relative">
+                                <div class="flex items-start justify-between mb-2">
+                                    <h3 class="font-bold text-white">{{ sim.role_title }}</h3>
+                                    <span class="text-[10px] uppercase tracking-wider font-bold {% if sim.status == 'completed' %}text-emerald-400 bg-emerald-400/10{% else %}text-amber-400 bg-amber-400/10{% endif %} px-2 py-1 rounded">
+                                        {{ sim.status }}
+                                    </span>
+                                </div>
+                                <p class="text-sm text-gray-400 mb-4">{{ sim.project_title }}</p>
+                                
+                                <div class="mb-4">
+                                    <div class="flex justify-between text-xs font-semibold mb-1.5">
+                                        <span class="text-gray-500">Progress</span>
+                                        <span class="text-blue-400">{{ sim.progress_percentage }}%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: {{ sim.progress_percentage }}%"></div>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-wrap gap-2 pt-2">
+                                    {% if sim.status == 'completed' %}
+                                    <a href="{% url 'end_simulation_report' sim.id %}"
+                                        class="text-xs font-bold bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 px-3 py-1.5 rounded-lg hover:bg-emerald-600 hover:text-white transition">
+                                        View Report
+                                    </a>
+                                    <a href="{% url 'simulation_chat' sim.id %}"
+                                        class="text-xs font-bold bg-white/5 text-gray-300 border border-white/10 px-3 py-1.5 rounded-lg hover:bg-white/10 transition">
+                                        Chat History
+                                    </a>
+                                    {% else %}
+                                    <a href="{% url 'resume_simulation' sim.id %}"
+                                        class="text-xs font-bold bg-blue-600 text-white px-4 py-1.5 rounded-lg hover:bg-blue-700 transition">
+                                        Resume
+                                    </a>
+                                    {% endif %}
+                                    
+                                    <form action="{% url 'delete_simulation' sim.id %}" method="post" onsubmit="return confirm('Delete this simulation?')">
+                                        {% csrf_token %}
+                                        <button type="submit" class="text-xs font-bold bg-red-500/10 text-red-400 border border-red-500/20 px-3 py-1.5 rounded-lg hover:bg-red-500 hover:text-white transition">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="text-center py-8">
+                                <p class="text-gray-500 text-sm italic">No active simulations.</p>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <button onclick="showNewSimulation()"
+                            class="w-full mt-6 bg-gradient-to-r from-blue-600 to-teal-500 text-white font-bold py-4 rounded-xl shadow-lg transition transform hover:scale-[1.02] active:scale-95">
+                            + Create New Simulation
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2">
+                    <div class="glass-card rounded-2xl p-8 h-full flex flex-col justify-center border-blue-500/20">
+                        {% if last_completed_report %}
+                        <div class="space-y-4">
+                            <h3 class="text-2xl font-bold text-white">Latest Performance</h3>
+                            <div class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-400">
+                                {{ last_completed_report.overall_score }}%
+                            </div>
+                            <p class="text-gray-400 text-lg max-w-md">Great job on your last project! Your industry-readiness is increasing.</p>
+                            <div class="pt-4">
+                                <a href="{% url 'profile' %}" class="text-blue-500 font-bold hover:text-teal-400 transition underline underline-offset-8">View Certificates →</a>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="text-center py-12">
+                            <div class="w-20 h-20 bg-blue-600/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
+                            </div>
+                            <h2 class="text-2xl font-bold text-white mb-3">Ready to Start?</h2>
+                            <p class="text-gray-400 mb-8 max-w-sm mx-auto">Launch your first AI-powered job simulation and gain real industry experience.</p>
+                            <button onclick="showNewSimulation()" class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 transition">Begin Journey</button>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="newSimulationView" class="hidden fade-in">
+            <div class="max-w-2xl mx-auto">
+                <button onclick="showDashboard()" class="text-gray-400 hover:text-white mb-6 flex items-center gap-2 transition font-semibold">
+                    ← Back to Dashboard
+                </button>
+                <div class="glass-card rounded-2xl p-8 border-blue-500/30">
+                    <h2 class="text-3xl font-extrabold text-white mb-2">New Simulation</h2>
+                    <p class="text-gray-400 mb-8">Configure your AI workspace environment.</p>
+                    
+                    <form action="{% url 'create_simulation' %}" method="POST" class="space-y-6">
+                        {% csrf_token %}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-bold text-gray-300 mb-2">Education Background</label>
+                                <input type="text" name="education"
+                                    class="w-full p-4 bg-[#0f172a] border border-white/10 rounded-xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition"
+                                    placeholder="e.g. B.Tech in CS" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-gray-300 mb-2">Simulation Scale</label>
+                                <div class="w-full p-4 bg-white/5 border border-white/10 rounded-xl text-gray-500 font-semibold">
+                                    1 Project (Standard)
+                                </div>
+                                <input type="hidden" name="project_count" value="1">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-300 mb-2">Select Career Track</label>
+                            <select name="job_role"
+                                class="w-full p-4 bg-[#0f172a] border border-white/10 rounded-xl text-white focus:ring-2 focus:ring-blue-500 outline-none transition appearance-none"
+                                required>
+                                <option value="Web Developer">Web Developer</option>
+                                <option value="Data Scientist">Data Scientist</option>
+                                <option value="Data Analyst">Data Analyst</option>
+                                <option value="Software Engineer">Software Engineer</option>
+                                <option value="Software Developer">Software Developer</option>
+                                <option value="AI Engineer">AI/ML Engineer</option>
+                                <option value="Backend Developer">Backend Developer</option>
+                                <option value="Full Stack Developer">Full Stack Developer</option>
+                            </select>
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-gradient-to-r from-blue-600 to-teal-500 text-white font-bold py-4 rounded-xl text-lg shadow-lg hover:scale-[1.02] transition">
+                            Initialize Simulation →
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-white/10 py-6">
+        <div class="container mx-auto px-6 text-center text-gray-500 text-sm">
+            © 2025 VirtuWork. Professional AI Simulations.
+        </div>
+    </footer>
+
+    <script>
+        function showNewSimulation() {
+            document.getElementById('dashboardView').classList.add('hidden');
+            document.getElementById('newSimulationView').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showDashboard() {
+            document.getElementById('newSimulationView').classList.add('hidden');
+            document.getElementById('dashboardView').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+
+</body>
+</html>
