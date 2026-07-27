@@ -1,0 +1,209 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Readiness Report - VirtuWork</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .progress-bar-bg {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 999px;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #2563eb, #14b8a6);
+            border-radius: 999px;
+            transition: width 1s ease-in-out;
+        }
+    </style>
+</head>
+
+<body class="text-gray-200 p-6 md:p-12 min-h-screen">
+    <div class="max-w-5xl mx-auto">
+        
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+            <div>
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                    <p class="text-blue-400 font-black uppercase text-[10px] tracking-[0.2em]">Simulation Artifact Generated</p>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-black text-white leading-tight">
+                    Performance Report
+                </h1>
+                <p class="text-gray-400 mt-2 font-medium">{{ sim.role_title }} | {{ sim.project_title }}</p>
+            </div>
+            <a href="{% url 'dashboard' %}"
+                class="bg-white/5 border border-white/10 hover:bg-white/10 px-8 py-3 rounded-xl font-bold transition flex items-center gap-3 group">
+                <i class="fas fa-arrow-left text-blue-500 group-hover:-translate-x-1 transition-transform"></i> 
+                Dashboard
+            </a>
+        </div>
+
+        <div class="glass-card rounded-3xl p-10 text-center mb-10 border-blue-500/20 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-blue-600/5 blur-[100px] -mr-32 -mt-32"></div>
+            
+            <h2 class="text-sm font-black text-gray-500 uppercase tracking-widest mb-6">Overall Career Readiness</h2>
+            
+            <div class="relative inline-flex items-center justify-center">
+                <div class="w-48 h-48 rounded-full border-4 border-white/5 flex items-center justify-center">
+                    <div class="w-40 h-40 rounded-full bg-[#0f172a] flex flex-col items-center justify-center border-4 border-blue-600 shadow-[0_0_40px_rgba(37,99,235,0.2)]">
+                        <span class="text-6xl font-black text-white leading-none">{{ report.overall_performance }}</span>
+                        <span class="text-[10px] font-black text-blue-400 uppercase tracking-tighter mt-1">Percentile</span>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-2xl md:text-3xl font-black mt-8 
+                {% if report.overall_performance >= 90 %} text-emerald-400 
+                {% elif report.overall_performance >= 75 %} text-blue-400 
+                {% elif report.overall_performance >= 60 %} text-teal-400 
+                {% elif report.overall_performance >= 40 %} text-amber-400 
+                {% else %} text-red-400 {% endif %}">
+                
+                {% if report.overall_performance >= 90 %}
+                    OUTSTANDING PERFORMANCE
+                {% elif report.overall_performance >= 75 %}
+                    EXCELLENT PROGRESS
+                {% elif report.overall_performance >= 60 %}
+                    COMPETENT & READY
+                {% elif report.overall_performance >= 40 %}
+                    FOUNDATIONAL SKILLS
+                {% else %}
+                    CRITICAL IMPROVEMENT NEEDED
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="glass-card p-8 rounded-2xl text-center hover:border-blue-500/40 transition-colors">
+                <div class="w-12 h-12 bg-blue-600/10 rounded-xl flex items-center justify-center mx-auto mb-4 text-blue-500">
+                    <i class="fas fa-comments text-xl"></i>
+                </div>
+                <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-1">Communication</p>
+                <p class="text-3xl font-black text-white">{{ report.communication_score }}%</p>
+            </div>
+            
+            <div class="glass-card p-8 rounded-2xl text-center hover:border-teal-500/40 transition-colors">
+                <div class="w-12 h-12 bg-teal-500/10 rounded-xl flex items-center justify-center mx-auto mb-4 text-teal-400">
+                    <i class="fas fa-code text-xl"></i>
+                </div>
+                <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-1">Technical Skill</p>
+                <p class="text-3xl font-black text-white">{{ report.technical_score }}%</p>
+            </div>
+            
+            <div class="glass-card p-8 rounded-2xl text-center hover:border-blue-500/40 transition-colors">
+                <div class="w-12 h-12 bg-blue-600/10 rounded-xl flex items-center justify-center mx-auto mb-4 text-blue-400">
+                    <i class="fas fa-brain text-xl"></i>
+                </div>
+                <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-1">Problem Solving</p>
+                <p class="text-3xl font-black text-white">{{ report.problem_solving_score }}%</p>
+            </div>
+        </div>
+
+        <div class="space-y-6 mb-12">
+            <h3 class="text-2xl font-black text-white flex items-center gap-3">
+                <span class="w-2 h-8 bg-blue-600 rounded-full"></span> 
+                Milestone Analysis
+            </h3>
+
+            {% for task in report.task_breakdown %}
+            <div class="glass-card p-6 rounded-2xl hover:bg-white/[0.05] transition-colors">
+                <div class="flex justify-between items-start mb-4">
+                    <h4 class="text-lg font-bold text-white">{{ task.title }}</h4>
+                    <span class="px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest
+                        {% if task.status == 'Information Only' %} bg-blue-500/10 text-blue-400
+                        {% elif task.score < 50 %} bg-red-500/10 text-red-400
+                        {% else %} bg-emerald-500/10 text-emerald-400 {% endif %}">
+                        Score: {{ task.score }}
+                    </span>
+                </div>
+                <p class="text-gray-400 text-sm leading-relaxed italic">"{{ task.feedback }}"</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="glass-card p-8 rounded-3xl mb-12">
+            <h3 class="text-xl font-black text-white mb-8 uppercase tracking-widest flex items-center gap-3">
+                <i class="fas fa-chart-bar text-blue-500"></i>
+                Soft Skills Heatmap
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                {% for skill, value in sim.soft_skills_data.items %}
+                <div class="space-y-3">
+                    <div class="flex justify-between items-end">
+                        <span class="text-xs font-black text-gray-500 uppercase tracking-widest">{{ skill }}</span>
+                        <span class="text-sm font-bold text-blue-400">{{ value }}%</span>
+                    </div>
+                    <div class="w-full progress-bar-bg h-2">
+                        <div class="progress-bar-fill h-2" style="width: {{ value }}%"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="bg-blue-600 p-10 rounded-3xl mb-12 shadow-2xl shadow-blue-900/20 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 blur-3xl rounded-full"></div>
+            <h3 class="text-2xl font-black text-white mb-4">AI Executive Summary</h3>
+            <p class="text-blue-50 leading-relaxed text-lg font-medium">"{{ report.summary }}"</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <div class="glass-card p-8 rounded-3xl border-emerald-500/20">
+                <h4 class="text-emerald-400 font-black mb-6 flex items-center gap-3 uppercase tracking-widest text-sm">
+                    <i class="fas fa-check-circle"></i> Key Strengths
+                </h4>
+                <ul class="space-y-4">
+                    {% for strength in report.strengths %}
+                    <li class="flex items-start gap-4 text-sm text-gray-300 font-medium">
+                        <span class="text-emerald-500 bg-emerald-500/10 w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                            <i class="fas fa-check text-[10px]"></i>
+                        </span>
+                        {{ strength }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="glass-card p-8 rounded-3xl border-amber-500/20">
+                <h4 class="text-amber-400 font-black mb-6 flex items-center gap-3 uppercase tracking-widest text-sm">
+                    <i class="fas fa-bolt"></i> Growth Areas
+                </h4>
+                <ul class="space-y-4">
+                    {% for weakness in report.weaknesses %}
+                    <li class="flex items-start gap-4 text-sm text-gray-300 font-medium">
+                        <span class="text-amber-500 bg-amber-500/10 w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5">
+                            <i class="fas fa-arrow-up text-[10px]"></i>
+                        </span>
+                        {{ weakness }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="text-center pt-8 border-t border-white/5">
+            <p class="text-gray-600 text-[10px] font-black uppercase tracking-[0.4em]">VirtuWork Analytics © 2026</p>
+        </div>
+    </div>
+</body>
+
+</html>

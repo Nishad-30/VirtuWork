@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - VirtuWork</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .avatar-glow {
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.2);
+        }
+    </style>
+</head>
+
+<body class="text-gray-200 min-h-screen flex flex-col">
+
+<header class="border-b border-white/10 bg-[#020617]/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 bg-gradient-to-r from-blue-600 to-teal-500 rounded-lg flex items-center justify-center text-white font-bold">
+                V
+            </div>
+            <h1 class="text-2xl font-extrabold text-white tracking-tight">VirtuWork</h1>
+        </div>
+        <a href="{% url 'dashboard' %}" class="text-sm font-bold text-blue-500 hover:text-teal-400 transition-colors uppercase tracking-widest">
+            Back to Dashboard
+        </a>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto w-full p-6 md:p-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+
+        <div class="lg:col-span-1">
+            <div class="glass-card rounded-3xl p-8 text-center border-blue-500/10">
+
+                <div class="relative inline-block mb-6">
+                    <div class="w-32 h-32 rounded-full mx-auto border-4 border-blue-600 avatar-glow
+                                flex items-center justify-center bg-[#0f172a]
+                                text-5xl font-black text-white">
+                        {{ user.username|first|upper }}
+                    </div>
+                    <div class="absolute bottom-1 right-1 w-6 h-6 bg-emerald-500 border-4 border-[#020617] rounded-full"></div>
+                </div>
+
+                <h1 class="text-3xl font-black text-white mb-1">
+                    {{ user.get_full_name|default:user.username }}
+                </h1>
+                <p class="text-blue-400 font-bold text-xs uppercase tracking-[0.2em] mb-6">{{ user.email }}</p>
+
+                <button class="w-full bg-white/5 hover:bg-white/10 border border-white/10
+                               text-white font-bold py-3 px-4 rounded-xl transition-all active:scale-95">
+                    Edit Profile
+                </button>
+            </div>
+        </div>
+
+        <div class="lg:col-span-2 space-y-8">
+            
+            <div class="glass-card rounded-3xl p-8">
+                <h2 class="text-xl font-black text-white mb-6 flex items-center gap-3">
+                    <span class="w-2 h-6 bg-blue-600 rounded-full"></span>
+                    Verified Credentials
+                </h2>
+
+                <div class="space-y-4">
+                    {% for cert in certificates %}
+                        <div class="bg-white/5 border border-white/5 p-5 rounded-2xl
+                                    flex flex-col sm:flex-row justify-between items-center gap-4 transition-all hover:border-blue-500/30">
+                            <div>
+                                <h3 class="font-bold text-white text-lg">
+                                    {{ cert.role_title }}
+                                </h3>
+                                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">
+                                    Issue Date: {{ cert.created_at|date:"F d, Y" }}
+                                </p>
+                            </div>
+
+                            <a href="{% url 'certificate' cert.id %}"
+                               class="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-teal-500
+                                      text-white font-black py-2.5 px-6
+                                      rounded-xl text-xs transition-transform hover:scale-105 active:scale-95 shadow-lg shadow-blue-600/20 text-center uppercase">
+                                View Certificate
+                            </a>
+                        </div>
+                    {% empty %}
+                        <div class="text-center py-10 border-2 border-dashed border-white/5 rounded-2xl">
+                            <p class="text-gray-500 font-medium italic">
+                                No certificates earned yet. Complete a simulation to verify your skills!
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="glass-card rounded-3xl p-8">
+                <h2 class="text-xl font-black text-white mb-6 flex items-center gap-3">
+                    <span class="w-2 h-6 bg-teal-500 rounded-full"></span>
+                    Simulation History
+                </h2>
+
+                <div class="space-y-4">
+                    {% for cert in history %}
+                        <div class="bg-white/5 border border-white/5 p-5 rounded-2xl
+                                    flex justify-between items-center transition-all hover:bg-white/[0.07]">
+                            <div>
+                                <h3 class="font-bold text-gray-300">
+                                    {{ cert.role_title }}
+                                </h3>
+                                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                                    Session Date: {{ cert.created_at|date:"M d, Y" }}
+                                </p>
+                            </div>
+                            <div class="w-2 h-2 rounded-full bg-blue-500/50"></div>
+                        </div>
+                    {% empty %}
+                        <p class="text-gray-600 text-sm italic">No recent activity found.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<footer class="mt-auto border-t border-white/10 py-8">
+    <div class="max-w-7xl mx-auto px-6 text-center text-gray-600 text-[10px] font-black uppercase tracking-[0.4em]">
+        VirtuWork Analytics © 2026
+    </div>
+</footer>
+
+</body>
+</html>
